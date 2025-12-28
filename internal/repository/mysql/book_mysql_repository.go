@@ -46,3 +46,33 @@ func (r *BookMySQLRepository) GetByID(ctx context.Context, id int64) (*domain.Bo
 	}
 	return book, nil
 }
+
+func (r *BookMySQLRepository) Update(ctx context.Context, book *domain.Book) error {
+	query := `UPDATE books SET title = ?, author = ?, available = ? WHERE id =?`
+
+	result, err := r.db.ExecContext(ctx, query, book.Title, book.Author, book.Available, book.ID)
+	if err != nil {
+		return err
+	}
+	rows, _ := result.RowsAffected() //sql operation -> how many row change
+	if rows == 0 {                   //sql query run perfectly but no rows match
+		return errors.New("BOOK NOT FOUND")
+	}
+	return nil
+
+}
+
+func (r *BookMySQLRepository) Delete(ctx context.Context, id int64) error {
+	query := `DELETE FROM books WHERE id = ?`
+	result, err := r.db.ExecContext(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	rows, _ := result.RowsAffected() //sql operation -> how many row change
+	if rows == 0 {
+		return errors.New("BOOK NOT FOUND")
+	}
+	return nil
+
+}
