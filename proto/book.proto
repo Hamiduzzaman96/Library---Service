@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package book;
+
+option go_package = "Library---Service/proto/bookpb";
+
+service BookService {
+  rpc CreateBook(CreateBookRequest) returns (Empty);
+  rpc GetBook(GetBookRequest) returns (BookResponse);
+  rpc UpdateBook(UpdateBookRequest) returns (Empty);
+  rpc DeleteBook(DeleteBookRequest) returns (Empty);
+}
+
+message CreateBookRequest {
+  string title = 1;
+  string author = 2;
+  string isbn = 3;
+}
+
+message UpdateBookRequest {
+  int64 id = 1;
+  string title = 2;
+  string author = 3;
+  bool available = 4;
+}
+
+
+message GetBookRequest {
+  int64 id = 1;
+}
+
+message DeleteBookRequest {
+  int64 id = 1;
+}
+
+message BookResponse {
+  int64 id = 1;
+  string title = 2;
+  string author = 3;
+  string isbn = 4;
+  bool available = 5;
+}
+
+message Empty {}
